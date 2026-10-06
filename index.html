@@ -300,6 +300,8 @@
       color: rgba(255, 255, 255, .86);
       text-shadow: 0 1px 2px rgba(0,0,0,.5), 0 0 24px rgba(0,0,0,.45);
     }
+    .bio p + p { margin-top: .7em; }      /* отступ между абзацами */
+    .bio__last { color: #fff; }
     .bio em {                       /* главные слова — жирным */
       font-style: normal;
       font-weight: 600;
@@ -459,13 +461,15 @@
         </a>
       </nav>
 
-      <p class="bio">
-        Я уехал в Москву <em>в 17</em>, всегда любил <em>видеопродакшен</em>
-        и успел поработать в больших агентствах. В итоге мы с партнёром запустили
+      <div class="bio">
+        <p>Я уехал в Москву <em>в 17</em>, всегда любил <em>видеопродакшен</em>
+        и успел поработать в больших агентствах.</p>
+        <p>В итоге мы с партнёром запустили
         <a href="https://themotionpulse.com" target="_blank" rel="noopener"><img src="https://themotionpulse.com/cdn/shop/files/MP_Without_Background-10_11.png?crop=center&amp;height=64&amp;width=64" alt="">MotionPulse</a>,
         этот проект отлично получается. При этом я продолжаю <em>учиться</em>
-        и пробовать новое. Показываю <em>весь свой путь</em> в своих соцсетях.
-      </p>
+        и пробовать новое.</p>
+        <p class="bio__last">Показываю <em>весь свой путь</em> в своих соцсетях.</p>
+      </div>
 
     </div>
 
