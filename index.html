@@ -12,6 +12,8 @@
   <meta property="og:description" content="От идеи до международного бренда. Сооснователь MotionPulse.">
   <meta property="og:image" content="https://antonizotov.com/poster.jpg">
   <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -407,11 +409,15 @@
     .shop:hover { background: rgba(255, 255, 255, .18); border-color: rgba(255, 255, 255, .4); }
     .shop span { opacity: .6; font-size: 14px; }
 
-    footer {
+    /* Подпись внизу экрана */
+    .copyright {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: calc(20px + env(safe-area-inset-bottom));
       text-align: center;
-      padding: 40px 16px 56px;
-      color: rgba(255,255,255,.45);
       font-size: 14px;
+      color: rgba(255, 255, 255, .5);
     }
 
     @media (max-width: 600px) {
@@ -440,9 +446,16 @@
   <!-- ================= HERO ================= -->
   <section class="hero">
     <!-- Положите свой ролик рядом с файлом как video.mp4 (и кадр-заставку poster.jpg) -->
-    <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="poster.jpg">
-      <source src="video.mp4" type="video/mp4">
-    </video>
+    <!-- Вертикальный экран (телефон) — video-mobile.mp4, горизонтальный — video.mp4 -->
+    <video class="hero__video" autoplay muted loop playsinline preload="auto"></video>
+    <script>
+      (function () {
+        const v = document.querySelector(".hero__video");
+        const vertical = matchMedia("(max-aspect-ratio: 4/5)").matches;
+        v.poster = vertical ? "poster-mobile.jpg" : "poster.jpg";
+        v.src = vertical ? "video-mobile.mp4" : "video.mp4";
+      })();
+    </script>
 
     <div class="hero__inner">
       <!-- Логотип: светящийся IZOTOVVO, ролик logo.mp4 -->
@@ -473,6 +486,7 @@
 
     </div>
 
+    <footer class="copyright">© 2026 Anton Izotov</footer>
   </section>
 
   <script>
