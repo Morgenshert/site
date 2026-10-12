@@ -420,6 +420,14 @@
       color: rgba(255, 255, 255, .5);
     }
 
+    /* Телефон: текст чуть меньше, видео под текстом темнее */
+    @media (max-width: 600px) {
+      .bio { font-size: 16.5px; line-height: 1.55; color: rgba(255, 255, 255, .92); }
+      .hero::after {
+        background:
+          linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,.55) 35%, rgba(0,0,0,.72) 65%, var(--bg) 100%);
+      }
+    }
     @media (max-width: 600px) {
       .stroke { width: 5.6em; transform: translateX(.35em); margin-top: 0; }
     }
