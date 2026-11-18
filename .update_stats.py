@@ -70,6 +70,7 @@ def main():
     print("Тип токена:", kind, "| адрес магазина вида *.myshopify.com:", STORE.endswith(".myshopify.com"))
 
     orders = gql(token, "{ ordersCount(limit: null) { count } }")["ordersCount"]["count"]
+    print("Заказов в Shopify:", orders)
 
     countries, cursor = set(), None
     q = """query($after: String) {
@@ -77,7 +78,6 @@ def main():
         nodes {
           billingAddress { countryCodeV2 }
           shippingAddress { countryCodeV2 }
-          customer { defaultAddress { countryCodeV2 } }
         }
         pageInfo { hasNextPage endCursor }
       }
@@ -85,7 +85,7 @@ def main():
     while True:
         page = gql(token, q, {"after": cursor})["orders"]
         for o in page["nodes"]:
-            for addr in (o.get("billingAddress"), o.get("shippingAddress"), (o.get("customer") or {}).get("defaultAddress")):
+            for addr in (o.get("billingAddress"), o.get("shippingAddress")):
                 if addr and addr.get("countryCodeV2"):
                     countries.add(addr["countryCodeV2"])
                     break
