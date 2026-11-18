@@ -473,9 +473,14 @@
       overflow: hidden;
       isolation: isolate;
       border-radius: 28px;
-      padding: clamp(56px, 9vw, 88px) 24px clamp(64px, 10vw, 96px);
+      padding: clamp(56px, 9vw, 88px) 24px calc(var(--strip) + var(--cut) + clamp(28px, 4vw, 40px));
       text-align: center;
       background: #111;
+      /* «Обрыв»: прозрачная прорезь над нижней полоской, сквозь неё виден чёрный фон */
+      --strip: clamp(56px, 9vw, 84px);   /* высота нижней полоски */
+      --cut: 7px;                        /* толщина прорези */
+      -webkit-mask-image: linear-gradient(to top, #000 var(--strip), transparent var(--strip), transparent calc(var(--strip) + var(--cut)), #000 calc(var(--strip) + var(--cut)));
+              mask-image: linear-gradient(to top, #000 var(--strip), transparent var(--strip), transparent calc(var(--strip) + var(--cut)), #000 calc(var(--strip) + var(--cut)));
     }
     .follow__box video {
       position: absolute;
@@ -491,14 +496,6 @@
       inset: 0;
       z-index: -1;
       background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(0,0,0,.55), rgba(0,0,0,.35));
-    }
-    .follow__line {                 /* тонкая линия над кнопкой, как в референсе */
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: clamp(36px, 5.5vw, 52px);
-      height: 1px;
-      background: rgba(255, 255, 255, .35);
     }
     .follow__title {
       font-weight: 600;
@@ -545,6 +542,8 @@
 
     /* Телефон: текст чуть меньше, видео под текстом темнее */
     @media (max-width: 600px) {
+      .follow__btn { padding: 13px 22px; font-size: 15px; gap: 8px; }
+      .follow__btn svg { width: 17px; height: 17px; }
       .bio { font-size: 16.5px; line-height: 1.55; color: rgba(255, 255, 255, .92); }
       .hero::after {
         background:
@@ -636,7 +635,6 @@
         <video class="follow__video" autoplay muted loop playsinline preload="metadata"></video>
         <h2 class="follow__title">Остальное —<br>в Telegram</h2>
         <p class="follow__text">Показываю больше жизни. Победы, провалы и цифры — то, что не влезает в Instagram.</p>
-        <span class="follow__line" aria-hidden="true"></span>
       </div>
       <a class="follow__btn" href="https://t.me/by_izotovvo" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21.5 3.5 2.5 10.8l7 2.7m12-10L18 20.5l-8.5-7m12-10-12 10m0 0V19l3.2-3.3"/></svg>
