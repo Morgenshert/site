@@ -430,32 +430,12 @@
       flex: none;
       overflow: visible;
     }
-    .stat__globe {                  /* видео планеты: чёрный фон ролика сливается с сайтом */
+    .stat__video {                  /* ролики-иконки: чёрный фон сливается с сайтом */
       object-fit: cover;
       mix-blend-mode: screen;
-      transform: scale(1.18);       /* у ролика есть поля вокруг планеты — компенсируем */
     }
+    .stat__globe { transform: scale(1.18); }   /* у ролика планеты поля вокруг — компенсируем */
 
-    /* Корзина: коробки падают внутрь */
-    .cart__body { fill: none; stroke: #fff; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-    .cart__wheel { fill: #fff; }
-    .cart__box { fill: #3ddc84; animation: drop 2.7s cubic-bezier(.5, 0, .75, 0) infinite; opacity: 0; }
-    .cart__box:nth-of-type(2) { animation-delay: .9s; }
-    .cart__box:nth-of-type(3) { animation-delay: 1.8s; }
-    .cart__box path { stroke: rgba(0,0,0,.45); stroke-width: 1; fill: none; }
-    @keyframes drop {
-      0%   { transform: translateY(-26px); opacity: 0; }
-      12%  { opacity: 1; }
-      45%  { transform: translateY(0); opacity: 1; animation-timing-function: ease-out; }
-      52%  { transform: translateY(-2px); }
-      60%  { transform: translateY(0); }
-      85%  { opacity: 1; }
-      100% { transform: translateY(0); opacity: 0; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .cart__box { animation: none; opacity: 1; }
-    }
     .stat__num {
       font-size: clamp(40px, 6vw, 68px);
       font-weight: 700;
@@ -646,23 +626,14 @@
       <!-- Цифры берутся из stats.json, который раз в час обновляется из Shopify -->
       <div class="stats" id="stats">
         <div class="stat">
-          <svg class="stat__icon" viewBox="0 0 64 64" aria-hidden="true">
-            <g class="cart__boxes">
-              <g class="cart__box"><rect x="22" y="24" width="10" height="10" rx="1.5"/><path d="M27 24v10M22 29h10"/></g>
-              <g class="cart__box"><rect x="33" y="22" width="11" height="12" rx="1.5"/><path d="M38.5 22v12"/></g>
-              <g class="cart__box"><rect x="27" y="26" width="9" height="8" rx="1.5"/><path d="M31.5 26v8"/></g>
-            </g>
-            <path class="cart__body" d="M5 14h7l6 26h30l5-18H15"/>
-            <circle class="cart__wheel" cx="22" cy="48" r="3.4"/>
-            <circle class="cart__wheel" cx="45" cy="48" r="3.4"/>
-          </svg>
+          <video class="stat__icon stat__video" src="orders.mp4" poster="orders-poster.jpg" autoplay muted loop playsinline aria-hidden="true"></video>
           <div class="stat__text">
             <span class="stat__num" data-key="orders">0</span>
             <span class="stat__label">заказов</span>
           </div>
         </div>
         <div class="stat">
-          <video class="stat__icon stat__globe" src="globe.mp4" poster="globe-poster.jpg" autoplay muted loop playsinline aria-hidden="true"></video>
+          <video class="stat__icon stat__video stat__globe" src="globe.mp4" poster="globe-poster.jpg" autoplay muted loop playsinline aria-hidden="true"></video>
           <div class="stat__text">
             <span class="stat__num" data-key="countries">0</span>
             <span class="stat__label">стран</span>
@@ -678,7 +649,7 @@
   <section class="follow">
     <div class="follow__card" id="followCard">
       <div class="follow__box">
-        <video class="follow__video" autoplay muted loop playsinline preload="auto"></video>
+        <video class="follow__video" src="telegram.mp4" poster="telegram-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
         <h2 class="follow__title">Остальное —<br>в Telegram</h2>
         <p class="follow__text">Показываю больше жизни. Победы, провалы и цифры — то, что не влезает в Instagram.</p>
       </div>
@@ -849,14 +820,6 @@
     }, { threshold: .3 });
     seen.observe(statsEl);
     seen.observe(document.getElementById("followCard"));
-
-    /* Видео в карточке Telegram: вертикальное на телефоне, горизонтальное на компьютере */
-    (function () {
-      const v = document.querySelector(".follow__video");
-      const vertical = matchMedia("(max-aspect-ratio: 4/5)").matches;
-      v.poster = vertical ? "poster-mobile.jpg" : "poster.jpg";
-      v.src = vertical ? "video-mobile.mp4" : "video.mp4";
-    })();
 
     /* Страховка: запускаем фоновые ролики, если браузер их приостановил */
     const playAll = () => document.querySelectorAll("video[autoplay]").forEach(v => v.play().catch(() => {}));
