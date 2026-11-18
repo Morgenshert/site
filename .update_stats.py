@@ -1,0 +1,89 @@
+"""
+Обновляет stats.json настоящими цифрами из Shopify.
+Запускается автоматически раз в час через GitHub Actions (.github/workflows/stats.yml).
+
+Секреты берутся из настроек репозитория (Settings → Secrets and variables → Actions):
+  SHOPIFY_STORE          адрес магазина, например motionpulse.myshopify.com
+  SHOPIFY_TOKEN          готовый Admin API токен (shpat_...)            — или —
+  SHOPIFY_CLIENT_ID      Client ID приложения из Dev Dashboard
+  SHOPIFY_CLIENT_SECRET  Client Secret приложения
+Ключи на сайт не попадают: этот файл их только читает из окружения.
+"""
+import json
+import os
+import sys
+import urllib.request
+from datetime import datetime, timezone
+
+API_VERSION = "2025-10"
+STORE = os.environ.get("SHOPIFY_STORE", "").strip().replace("https://", "").strip("/")
+
+
+def http_json(url, payload, headers):
+    req = urllib.request.Request(url, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json", **headers})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        return json.load(r)
+
+
+def get_token():
+    token = os.environ.get("SHOPIFY_TOKEN", "").strip()
+    if token:
+        return token
+    cid = os.environ.get("SHOPIFY_CLIENT_ID", "").strip()
+    secret = os.environ.get("SHOPIFY_CLIENT_SECRET", "").strip()
+    if not (cid and secret):
+        sys.exit("Нет ключей: добавьте SHOPIFY_TOKEN или SHOPIFY_CLIENT_ID + SHOPIFY_CLIENT_SECRET")
+    data = http_json(f"https://{STORE}/admin/oauth/access_token",
+                     {"grant_type": "client_credentials", "client_id": cid, "client_secret": secret}, {})
+    return data["access_token"]
+
+
+def gql(token, query, variables=None):
+    data = http_json(f"https://{STORE}/admin/api/{API_VERSION}/graphql.json",
+                     {"query": query, "variables": variables or {}},
+                     {"X-Shopify-Access-Token": token})
+    if data.get("errors"):
+        sys.exit("Ошибка Shopify: " + json.dumps(data["errors"], ensure_ascii=False))
+    return data["data"]
+
+
+def main():
+    if not STORE:
+        sys.exit("Нет SHOPIFY_STORE")
+    token = get_token()
+
+    orders = gql(token, "{ ordersCount(limit: null) { count } }")["ordersCount"]["count"]
+
+    countries, cursor = set(), None
+    q = """query($after: String) {
+      orders(first: 250, after: $after) {
+        nodes {
+          billingAddress { countryCodeV2 }
+          shippingAddress { countryCodeV2 }
+          customer { defaultAddress { countryCodeV2 } }
+        }
+        pageInfo { hasNextPage endCursor }
+      }
+    }"""
+    while True:
+        page = gql(token, q, {"after": cursor})["orders"]
+        for o in page["nodes"]:
+            for addr in (o.get("billingAddress"), o.get("shippingAddress"), (o.get("customer") or {}).get("defaultAddress")):
+                if addr and addr.get("countryCodeV2"):
+                    countries.add(addr["countryCodeV2"])
+                    break
+        if not page["pageInfo"]["hasNextPage"]:
+            break
+        cursor = page["pageInfo"]["endCursor"]
+
+    stats = {"orders": orders, "countries": len(countries), "updated": datetime.now(timezone.utc).strftime("%Y-%m-%d")}
+    if stats["countries"] == 0:
+        sys.exit("Страны не определились (нет доступа к адресам заказов) — stats.json не меняю")
+    with open("stats.json", "w") as f:
+        json.dump(stats, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+    print("stats.json:", stats)
+
+
+if __name__ == "__main__":
+    main()
