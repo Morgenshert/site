@@ -453,61 +453,86 @@
       100% { box-shadow: 0 0 0 0 rgba(61,220,132,0); }
     }
 
-    /* ===== Блок «Что тебя ждёт» ===== */
+    /* ===== Карточка «Остальное — в Telegram» ===== */
     .follow {
-      padding: clamp(24px, 6vw, 80px) 16px clamp(48px, 8vw, 96px);
+      padding: clamp(24px, 6vw, 80px) 16px clamp(72px, 9vw, 112px);
       display: flex;
       justify-content: center;
     }
     .follow__card {
+      position: relative;
       width: 100%;
-      max-width: 460px;
-      border-radius: 24px;
-      overflow: hidden;
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
+      max-width: 620px;
       opacity: 0;
       transform: translateY(30px);
       transition: opacity .8s ease, transform .8s cubic-bezier(.2, .8, .2, 1);
     }
     .follow__card.seen { opacity: 1; transform: none; }
-    .follow__media { position: relative; aspect-ratio: 16 / 10; background: #111; }
-    .follow__media video { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .follow__body { padding: 22px 22px 24px; }
-    .follow__kicker {
-      font: 500 12px ui-monospace, "SF Mono", Menlo, monospace;
-      letter-spacing: .1em;
-      color: rgba(255,255,255,.5);
-      margin-bottom: 6px;
+    .follow__box {                  /* скруглённая плашка с видео вместо белого фона */
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      border-radius: 28px;
+      padding: clamp(56px, 9vw, 88px) 24px clamp(64px, 10vw, 96px);
+      text-align: center;
+      background: #111;
     }
-    .follow__row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 13px 0;
-      border-bottom: 1px solid rgba(255,255,255,.1);
-      font: 500 13px ui-monospace, "SF Mono", Menlo, monospace;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.5);
+    .follow__box video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
     }
-    .follow__row b { color: #fff; font-weight: 600; }
-    .follow__row svg { width: 16px; height: 16px; flex: none; color: #fff; }
-    .follow__btn {
-      display: flex;
+    .follow__box::after {            /* затемнение, чтобы текст читался */
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(0,0,0,.55), rgba(0,0,0,.35));
+    }
+    .follow__line {                 /* тонкая линия над кнопкой, как в референсе */
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: clamp(36px, 5.5vw, 52px);
+      height: 1px;
+      background: rgba(255, 255, 255, .35);
+    }
+    .follow__title {
+      font-weight: 600;
+      font-size: clamp(40px, 7.5vw, 72px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      text-shadow: 0 2px 24px rgba(0,0,0,.35);
+    }
+    .follow__text {
+      max-width: 420px;
+      margin: 18px auto 0;
+      font-size: clamp(16px, 1.7vw, 19px);
+      line-height: 1.5;
+      color: rgba(255,255,255,.88);
+    }
+    .follow__btn {                  /* кнопка-пилюля на нижней границе плашки */
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translate(-50%, 50%);
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 10px;
-      margin-top: 22px;
-      padding: 15px 20px;
-      border-radius: 14px;
+      padding: 18px 34px;
+      border-radius: 999px;
       background: #fff;
       color: #000;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 17px;
+      white-space: nowrap;
+      box-shadow: 0 10px 30px rgba(0,0,0,.45);
       transition: transform .2s, background .2s;
     }
-    .follow__btn:hover { transform: translateY(-2px); background: #f0f0f0; }
+    .follow__btn:hover { transform: translate(-50%, calc(50% - 2px)); background: #f0f0f0; }
     .follow__btn svg { width: 20px; height: 20px; }
 
     /* Подпись внизу страницы */
@@ -604,31 +629,19 @@
     </div>
   </section>
 
-  <!-- ================= ЧТО ТЕБЯ ЖДЁТ ================= -->
+  <!-- ================= ОСТАЛЬНОЕ — В TELEGRAM ================= -->
   <section class="follow">
     <div class="follow__card" id="followCard">
-      <div class="follow__media">
-        <video src="video.mp4" poster="poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+      <div class="follow__box">
+        <video class="follow__video" autoplay muted loop playsinline preload="metadata"></video>
+        <h2 class="follow__title">Остальное —<br>в Telegram</h2>
+        <p class="follow__text">Показываю больше жизни. Победы, провалы и цифры — то, что не влезает в Instagram.</p>
+        <span class="follow__line" aria-hidden="true"></span>
       </div>
-      <div class="follow__body">
-        <div class="follow__kicker">ЧТО ТЕБЯ ЖДЁТ В TELEGRAM</div>
-        <div class="follow__row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>
-          <span><b>Ролики</b> — в день выхода</span>
-        </div>
-        <div class="follow__row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg>
-          <span><b>Разборы</b> — победы, провалы и цифры</span>
-        </div>
-        <div class="follow__row">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
-          <span><b>Закулисье</b> — то, что не попадает в Instagram</span>
-        </div>
-        <a class="follow__btn" href="https://t.me/by_izotovvo" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21.5 3.5 2.5 10.8l7 2.7m12-10L18 20.5l-8.5-7m12-10-12 10m0 0V19l3.2-3.3"/></svg>
-          Читать в Telegram
-        </a>
-      </div>
+      <a class="follow__btn" href="https://t.me/by_izotovvo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21.5 3.5 2.5 10.8l7 2.7m12-10L18 20.5l-8.5-7m12-10-12 10m0 0V19l3.2-3.3"/></svg>
+        Перейти в Telegram
+      </a>
     </div>
   </section>
 
@@ -792,6 +805,14 @@
     }, { threshold: .3 });
     seen.observe(statsEl);
     seen.observe(document.getElementById("followCard"));
+
+    /* Видео в карточке Telegram — то же, что на главном экране */
+    (function () {
+      const v = document.querySelector(".follow__video");
+      const vertical = matchMedia("(max-aspect-ratio: 4/5)").matches;
+      v.poster = vertical ? "poster-mobile.jpg" : "poster.jpg";
+      v.src = vertical ? "video-mobile.mp4" : "video.mp4";
+    })();
 
     /* Страховка: запускаем фоновые ролики, если браузер их приостановил */
     const playAll = () => document.querySelectorAll("video[autoplay]").forEach(v => v.play().catch(() => {}));
