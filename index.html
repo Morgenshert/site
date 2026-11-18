@@ -485,6 +485,7 @@
 
     /* ===== Карточка «Остальное — в Telegram» ===== */
     .follow {
+      overflow-x: clip;
       padding: clamp(32px, 5vw, 56px) 16px clamp(72px, 9vw, 112px);
       display: flex;
       justify-content: center;
@@ -501,13 +502,14 @@
     .follow__card.seen { opacity: 1; transform: none; }
     .follow__glow {                 /* свечение берёт цвета из видео и меняется вместе с ним */
       position: absolute;
-      inset: -4%;
+      left: -4%;
+      top: -6%;
       width: 108%;
-      height: 108%;
+      height: 112%;
       z-index: -1;
       border-radius: 40px;
-      filter: blur(42px) saturate(1.6) brightness(1.5);
-      opacity: .85;
+      filter: blur(42px) saturate(1.6) brightness(1.4);
+      opacity: .5;                  /* свечение помягче */
       pointer-events: none;
     }
     .follow__box {                  /* скруглённая плашка с видео вместо белого фона */
@@ -579,6 +581,7 @@
 
     /* Телефон */
     @media (max-width: 600px) {
+      .follow__glow { left: 2%; width: 96%; top: -14%; height: 128%; filter: blur(30px) saturate(1.6) brightness(1.4); opacity: .6; }
       .hero { --banner: 72vh; padding-top: 88px; }
       .follow__btn { padding: 13px 22px; font-size: 15px; gap: 8px; }
       .follow__btn svg { width: 17px; height: 17px; }
