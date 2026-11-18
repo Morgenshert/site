@@ -582,7 +582,19 @@
 
     /* Телефон */
     @media (max-width: 600px) {
-      .follow__glow { left: -6%; width: 112%; top: -26%; height: 152%; filter: blur(30px) saturate(1.6) brightness(1.4); opacity: .6; }
+      /* на телефоне — спокойный статичный ореол вместо «живого» свечения из видео (Safari на iPhone с ним мерцает) */
+      .follow__glow { display: none; }
+      .follow__card::before {
+        content: "";
+        position: absolute;
+        left: -4%;
+        right: -4%;
+        top: -14%;
+        bottom: -14%;
+        z-index: -1;
+        pointer-events: none;
+        background: radial-gradient(closest-side, rgba(255, 186, 120, .16), rgba(255, 186, 120, .06) 60%, transparent);
+      }
       .hero { --banner: 72vh; padding-top: 88px; }
       .follow__btn { padding: 13px 22px; font-size: 15px; gap: 8px; }
       .follow__btn svg { width: 17px; height: 17px; }
@@ -853,7 +865,7 @@
     (function () {
       const v = document.querySelector(".follow__video");
       const cv = document.getElementById("followGlow");
-      if (!v || !cv) return;
+      if (!v || !cv || matchMedia("(max-width: 600px)").matches) return;   // на телефоне не рисуем — там статичный ореол
       const ctx = cv.getContext("2d");
       let first = true;
       const draw = () => {
