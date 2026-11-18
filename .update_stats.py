@@ -37,10 +37,14 @@ def http_json(url, payload, headers, form=False):
 
 def get_token():
     token = os.environ.get("SHOPIFY_TOKEN", "").strip()
+    secret = os.environ.get("SHOPIFY_CLIENT_SECRET", "").strip()
+    if token.startswith("shpss_"):
+        # в SHOPIFY_TOKEN положили API secret key, а не токен доступа — используем его как секрет
+        print("SHOPIFY_TOKEN похож на API secret key (shpss_) — получаю токен через Client ID")
+        secret, token = token, ""
     if token:
         return token
     cid = os.environ.get("SHOPIFY_CLIENT_ID", "").strip()
-    secret = os.environ.get("SHOPIFY_CLIENT_SECRET", "").strip()
     if not (cid and secret):
         sys.exit("Нет ключей: добавьте SHOPIFY_TOKEN или SHOPIFY_CLIENT_ID + SHOPIFY_CLIENT_SECRET")
     data = http_json(f"https://{STORE}/admin/oauth/access_token",
