@@ -197,13 +197,35 @@
     .skip:hover { background: rgba(0,0,0,.1); color: #111; }
 
     /* ================= HERO ================= */
-    .hero {                        /* чёрный первый экран, как у Дэниела; видео — ниже в плашке */
+    .hero {                        /* первый экран: видео-баннер сверху, как у Cinegrams */
       position: relative;
       display: grid;
       place-items: center;
-      padding: clamp(64px, 10vw, 112px) 16px clamp(8px, 2vw, 16px);
+      padding: clamp(96px, 14vw, 170px) 16px clamp(8px, 2vw, 16px);
       text-align: center;
       background: #000;
+      isolation: isolate;
+      --banner: min(78vh, 760px);  /* высота видео-баннера — укороченный, не на весь экран */
+    }
+    .hero__video,
+    .hero__vignette {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--banner);
+      pointer-events: none;
+    }
+    .hero__video {
+      width: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+    .hero__vignette {               /* виньетка по краям + плавный уход в чёрный снизу */
+      z-index: -1;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 45%, rgba(0,0,0,.35) 62%, rgba(0,0,0,.75) 80%, rgba(0,0,0,.95) 92%, #000 100%),
+        radial-gradient(ellipse 75% 85% at 50% 40%, rgba(0,0,0,.25) 0%, rgba(0,0,0,.55) 60%, rgba(0,0,0,.95) 100%);
     }
     .hero__inner { max-width: 900px; }
     .hero h1 {
@@ -517,6 +539,7 @@
 
     /* Телефон */
     @media (max-width: 600px) {
+      .hero { --banner: 72vh; padding-top: 88px; }
       .follow__btn { padding: 13px 22px; font-size: 15px; gap: 8px; }
       .follow__btn svg { width: 17px; height: 17px; }
       .bio { font-size: 16.5px; line-height: 1.55; color: rgba(255, 255, 255, .92); }
@@ -546,6 +569,18 @@
 
   <!-- ================= HERO ================= -->
   <section class="hero">
+    <!-- Видео-баннер: вертикальное на телефоне, горизонтальное на компьютере -->
+    <video class="hero__video" autoplay muted loop playsinline preload="auto"></video>
+    <div class="hero__vignette" aria-hidden="true"></div>
+    <script>
+      (function () {
+        const v = document.querySelector(".hero__video");
+        const vertical = matchMedia("(max-aspect-ratio: 4/5)").matches;
+        v.poster = vertical ? "poster-mobile.jpg" : "poster.jpg";
+        v.src = vertical ? "video-mobile.mp4" : "video.mp4";
+      })();
+    </script>
+
     <div class="hero__inner">
       <!-- Логотип: светящийся IZOTOVVO, ролик logo.mp4 -->
       <video class="logo" src="logo.mp4" autoplay muted loop playsinline aria-label="IZOTOVVO"></video>
