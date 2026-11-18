@@ -463,6 +463,7 @@
       position: relative;
       width: 100%;
       max-width: 620px;
+      filter: drop-shadow(0 0 28px rgba(255,255,255,.14)) drop-shadow(0 0 70px rgba(255,255,255,.06));   /* мягкое свечение */
       opacity: 0;
       transform: translateY(30px);
       transition: opacity .8s ease, transform .8s cubic-bezier(.2, .8, .2, 1);
@@ -478,9 +479,18 @@
       background: #111;
       /* «Обрыв»: прозрачная прорезь над нижней полоской, сквозь неё виден чёрный фон */
       --strip: clamp(56px, 9vw, 84px);   /* высота нижней полоски */
-      --cut: 7px;                        /* толщина прорези */
+      --cut: 4px;                        /* толщина прорези */
       -webkit-mask-image: linear-gradient(to top, #000 var(--strip), transparent var(--strip), transparent calc(var(--strip) + var(--cut)), #000 calc(var(--strip) + var(--cut)));
               mask-image: linear-gradient(to top, #000 var(--strip), transparent var(--strip), transparent calc(var(--strip) + var(--cut)), #000 calc(var(--strip) + var(--cut)));
+    }
+    .follow__box::before {           /* нижняя полоска под прорезью — белая, как в референсе */
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: var(--strip);
+      background: #fff;
     }
     .follow__box video {
       position: absolute;
@@ -521,15 +531,16 @@
       gap: 10px;
       padding: 18px 34px;
       border-radius: 999px;
-      background: #fff;
-      color: #000;
+      background: #000;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.22);   /* чтобы низ кнопки не терялся на чёрном фоне */
       font-weight: 600;
       font-size: 17px;
       white-space: nowrap;
       box-shadow: 0 10px 30px rgba(0,0,0,.45);
       transition: transform .2s, background .2s;
     }
-    .follow__btn:hover { transform: translate(-50%, calc(50% - 2px)); background: #f0f0f0; }
+    .follow__btn:hover { transform: translate(-50%, calc(50% - 2px)); background: #161616; }
     .follow__btn svg { width: 20px; height: 20px; }
 
     /* Подпись внизу страницы */
