@@ -197,35 +197,13 @@
     .skip:hover { background: rgba(0,0,0,.1); color: #111; }
 
     /* ================= HERO ================= */
-    .hero {
+    .hero {                        /* чёрный первый экран, как у Дэниела; видео — ниже в плашке */
       position: relative;
-      min-height: 100vh;
-      min-height: 100svh;
       display: grid;
       place-items: center;
-      padding: 96px 16px;
-      overflow: hidden;
+      padding: clamp(64px, 10vw, 112px) 16px clamp(8px, 2vw, 16px);
       text-align: center;
-      isolation: isolate;
-      background: radial-gradient(ellipse at 50% 40%, #2a3550 0%, #000 75%); /* пока нет видео */
-    }
-    .hero__video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -2;
-      clip-path: inset(0 0 2px 0);
-    }
-    .hero::after {                 /* затемнение видео, чтобы текст читался */
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background:
-        linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,.03) 46%, rgba(0,0,0,.1) 52%, rgba(0,0,0,.22) 58%, rgba(0,0,0,.38) 64%, rgba(0,0,0,.56) 71%, rgba(0,0,0,.74) 78%, rgba(0,0,0,.88) 83%, rgba(0,0,0,.97) 90%, #000 95%),                /* плавный уход в чёрный внизу */
-        radial-gradient(ellipse 70% 60% at 50% 55%, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 100%);
+      background: #000;
     }
     .hero__inner { max-width: 900px; }
     .hero h1 {
@@ -455,7 +433,7 @@
 
     /* ===== Карточка «Остальное — в Telegram» ===== */
     .follow {
-      padding: clamp(24px, 6vw, 80px) 16px clamp(72px, 9vw, 112px);
+      padding: clamp(32px, 5vw, 56px) 16px clamp(72px, 9vw, 112px);
       display: flex;
       justify-content: center;
     }
@@ -537,15 +515,11 @@
       color: rgba(255, 255, 255, .5);
     }
 
-    /* Телефон: текст чуть меньше, видео под текстом темнее */
+    /* Телефон */
     @media (max-width: 600px) {
       .follow__btn { padding: 13px 22px; font-size: 15px; gap: 8px; }
       .follow__btn svg { width: 17px; height: 17px; }
       .bio { font-size: 16.5px; line-height: 1.55; color: rgba(255, 255, 255, .92); }
-      .hero::after {
-        background:
-          linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,.55) 30%, rgba(0,0,0,.68) 52%, rgba(0,0,0,.8) 68%, rgba(0,0,0,.92) 80%, rgba(0,0,0,.98) 89%, #000 95%);
-      }
     }
     @media (max-width: 600px) {
       .stroke { width: 5.6em; transform: translateX(.35em); margin-top: 0; }
@@ -572,18 +546,6 @@
 
   <!-- ================= HERO ================= -->
   <section class="hero">
-    <!-- Положите свой ролик рядом с файлом как video.mp4 (и кадр-заставку poster.jpg) -->
-    <!-- Вертикальный экран (телефон) — video-mobile.mp4, горизонтальный — video.mp4 -->
-    <video class="hero__video" autoplay muted loop playsinline preload="auto"></video>
-    <script>
-      (function () {
-        const v = document.querySelector(".hero__video");
-        const vertical = matchMedia("(max-aspect-ratio: 4/5)").matches;
-        v.poster = vertical ? "poster-mobile.jpg" : "poster.jpg";
-        v.src = vertical ? "video-mobile.mp4" : "video.mp4";
-      })();
-    </script>
-
     <div class="hero__inner">
       <!-- Логотип: светящийся IZOTOVVO, ролик logo.mp4 -->
       <video class="logo" src="logo.mp4" autoplay muted loop playsinline aria-label="IZOTOVVO"></video>
@@ -629,7 +591,7 @@
   <section class="follow">
     <div class="follow__card" id="followCard">
       <div class="follow__box">
-        <video class="follow__video" autoplay muted loop playsinline preload="metadata"></video>
+        <video class="follow__video" autoplay muted loop playsinline preload="auto"></video>
         <h2 class="follow__title">Остальное —<br>в Telegram</h2>
         <p class="follow__text">Показываю больше жизни. Победы, провалы и цифры — то, что не влезает в Instagram.</p>
       </div>
@@ -801,7 +763,7 @@
     seen.observe(statsEl);
     seen.observe(document.getElementById("followCard"));
 
-    /* Видео в карточке Telegram — то же, что на главном экране */
+    /* Видео в карточке Telegram: вертикальное на телефоне, горизонтальное на компьютере */
     (function () {
       const v = document.querySelector(".follow__video");
       const vertical = matchMedia("(max-aspect-ratio: 4/5)").matches;
