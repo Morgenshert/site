@@ -23,7 +23,7 @@
       --text-dim: rgba(255, 255, 255, .82);
       --glass: rgba(255, 255, 255, .08);
       --glass-border: rgba(255, 255, 255, .16);
-      --bg: #0b0b0d;
+      --bg: #000;
       --accent: #ff5a1f;
       --intro-bg: #f6f6f6;
       --intro-text: #111;
@@ -207,7 +207,7 @@
       overflow: hidden;
       text-align: center;
       isolation: isolate;
-      background: radial-gradient(ellipse at 50% 40%, #2a3550 0%, #0b0b0d 75%); /* пока нет видео */
+      background: radial-gradient(ellipse at 50% 40%, #2a3550 0%, #000 75%); /* пока нет видео */
     }
     .hero__video {
       position: absolute;
@@ -216,6 +216,7 @@
       height: 100%;
       object-fit: cover;
       z-index: -2;
+      clip-path: inset(0 0 2px 0);
     }
     .hero::after {                 /* затемнение видео, чтобы текст читался */
       content: "";
@@ -223,8 +224,8 @@
       inset: 0;
       z-index: -1;
       background:
-        radial-gradient(ellipse 70% 60% at 50% 55%, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 100%),
-        linear-gradient(to bottom, rgba(0,0,0,.15) 55%, var(--bg) 100%);
+        linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,.03) 46%, rgba(0,0,0,.1) 52%, rgba(0,0,0,.22) 58%, rgba(0,0,0,.38) 64%, rgba(0,0,0,.56) 71%, rgba(0,0,0,.74) 78%, rgba(0,0,0,.88) 83%, rgba(0,0,0,.97) 90%, #000 95%),                /* плавный уход в чёрный внизу */
+        radial-gradient(ellipse 70% 60% at 50% 55%, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 100%);
     }
     .hero__inner { max-width: 900px; }
     .hero h1 {
@@ -521,7 +522,7 @@
       .bio { font-size: 16.5px; line-height: 1.55; color: rgba(255, 255, 255, .92); }
       .hero::after {
         background:
-          linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,.55) 35%, rgba(0,0,0,.72) 65%, var(--bg) 100%);
+          linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,.55) 30%, rgba(0,0,0,.68) 52%, rgba(0,0,0,.8) 68%, rgba(0,0,0,.92) 80%, rgba(0,0,0,.98) 89%, #000 95%);
       }
     }
     @media (max-width: 600px) {
