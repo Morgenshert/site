@@ -474,23 +474,9 @@
       overflow: hidden;
       isolation: isolate;
       border-radius: 28px;
-      padding: clamp(56px, 9vw, 88px) 24px calc(var(--strip) + var(--cut) + clamp(28px, 4vw, 40px));
+      padding: clamp(56px, 9vw, 88px) 24px clamp(72px, 10vw, 100px);
       text-align: center;
       background: #111;
-      /* «Обрыв»: прозрачная прорезь над нижней полоской, сквозь неё виден чёрный фон */
-      --strip: clamp(56px, 9vw, 84px);   /* высота нижней полоски */
-      --cut: 4px;                        /* толщина прорези */
-      -webkit-mask-image: linear-gradient(to top, #000 var(--strip), transparent var(--strip), transparent calc(var(--strip) + var(--cut)), #000 calc(var(--strip) + var(--cut)));
-              mask-image: linear-gradient(to top, #000 var(--strip), transparent var(--strip), transparent calc(var(--strip) + var(--cut)), #000 calc(var(--strip) + var(--cut)));
-    }
-    .follow__box::before {           /* нижняя полоска под прорезью — белая, как в референсе */
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: var(--strip);
-      background: #fff;
     }
     .follow__box video {
       position: absolute;
