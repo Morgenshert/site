@@ -61,6 +61,9 @@ def main():
     if not STORE:
         sys.exit("Нет SHOPIFY_STORE")
     token = get_token()
+    # Безопасная подсказка для журнала: только тип токена и формат адреса, без самих ключей
+    kind = token[:6] if token[:6] in ("shpat_", "shpca_", "shppa_", "shpss_") else "не shpat_ (похоже, это не Admin API access token)"
+    print("Тип токена:", kind, "| адрес магазина вида *.myshopify.com:", STORE.endswith(".myshopify.com"))
 
     orders = gql(token, "{ ordersCount(limit: null) { count } }")["ordersCount"]["count"]
 
