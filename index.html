@@ -425,8 +425,8 @@
     }
     .stat__text { display: flex; flex-direction: column; align-items: flex-start; }
     .stat__icon {
-      width: clamp(52px, 7.5vw, 88px);
-      height: clamp(52px, 7.5vw, 88px);
+      width: clamp(44px, 5.6vw, 68px);
+      height: clamp(44px, 5.6vw, 68px);
       flex: none;
       overflow: visible;
     }
@@ -434,10 +434,21 @@
       object-fit: cover;
       mix-blend-mode: screen;
     }
-    .stat__globe { transform: scale(1.18); }   /* у ролика планеты поля вокруг — компенсируем */
+    .stat__globe { transform: scale(1.18); }
+    /* Растушёвка краёв роликов-иконок, чтобы не было резких границ */
+    .stat__video {
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+      -webkit-mask-composite: source-in;
+              mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+              mask-composite: intersect;
+    }
+    .stat__video.stat__globe {
+      -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+              mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+    }   /* у ролика планеты поля вокруг — компенсируем */
 
     .stat__num {
-      font-size: clamp(40px, 6vw, 68px);
+      font-size: clamp(30px, 4.2vw, 50px);   /* цифры поменьше */
       font-weight: 700;
       letter-spacing: -0.04em;
       line-height: 1;
@@ -461,13 +472,13 @@
     }
     .live-dot {
       width: 7px; height: 7px; border-radius: 50%;
-      background: #3ddc84;
-      box-shadow: 0 0 0 0 rgba(61,220,132,.6);
+      background: #ff9a3c;           /* оранжевая «живая» точка */
+      box-shadow: 0 0 0 0 rgba(255,154,60,.6);
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
-      70%  { box-shadow: 0 0 0 8px rgba(61,220,132,0); }
-      100% { box-shadow: 0 0 0 0 rgba(61,220,132,0); }
+      70%  { box-shadow: 0 0 0 8px rgba(255,154,60,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,154,60,0); }
     }
 
     /* ===== Карточка «Остальное — в Telegram» ===== */
