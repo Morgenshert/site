@@ -539,10 +539,17 @@
     }
     .follow__title {
       font-weight: 600;
-      font-size: clamp(40px, 7.5vw, 72px);
-      line-height: 1.02;
+      font-size: clamp(32px, 4.8vw, 50px);   /* меньше главного заголовка */
+      line-height: 1.05;
       letter-spacing: -0.03em;
       text-shadow: 0 2px 24px rgba(0,0,0,.35);
+    }
+    .follow__label {                /* маленькая подпись над заголовком плашки */
+      display: block;
+      margin-bottom: 14px;
+      font: 500 13px ui-monospace, "SF Mono", Menlo, monospace;
+      letter-spacing: .2em;
+      color: rgba(255,255,255,.72);
     }
     .follow__text {
       max-width: 420px;
@@ -579,7 +586,7 @@
       left: 0;
       width: 45%;
       pointer-events: none;
-      background: linear-gradient(105deg, transparent 15%, rgba(0,0,0,.10) 38%, rgba(255,255,255,.95) 50%, rgba(0,0,0,.10) 62%, transparent 85%);
+      background: linear-gradient(105deg, transparent 15%, rgba(255,154,60,.28) 36%, rgba(255,214,160,.9) 50%, rgba(255,154,60,.28) 64%, transparent 85%);   /* тёплый оранжевый блик */
       transform: translateX(-160%) skewX(-12deg);
       animation: btnShine 4s ease-in-out 1.5s infinite;
     }
@@ -711,6 +718,7 @@
       <canvas class="follow__glow" id="followGlow" width="16" height="9" aria-hidden="true"></canvas>
       <div class="follow__box">
         <video class="follow__video" src="telegram.mp4" poster="telegram-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
+        <span class="follow__label">TELEGRAM-КАНАЛ</span>
         <h2 class="follow__title">Остальное –<br>в Telegram</h2>
         <p class="follow__text">Показываю больше жизни. Победы, провалы и цифры – то, что не влезает в Instagram.</p>
       </div>
