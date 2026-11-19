@@ -551,7 +551,7 @@
       line-height: 1.5;
       color: rgba(255,255,255,.88);
     }
-    .follow__btn {                  /* кнопка-пилюля на нижней границе плашки */
+    .follow__btn {                  /* белая кнопка-пилюля на нижней границе плашки */
       position: absolute;
       left: 50%;
       bottom: 0;
@@ -561,15 +561,42 @@
       gap: 10px;
       padding: 18px 34px;
       border-radius: 999px;
-      background: #000;
-      color: #fff;
+      color: #000;
       font-weight: 600;
       font-size: 17px;
       white-space: nowrap;
-      box-shadow: 0 10px 30px rgba(0,0,0,.45);
-      transition: transform .2s, background .2s;
+      transition: transform .2s;
+      animation: btnGlow 2.6s ease-in-out infinite;   /* лёгкое «дыхание» свечения */
     }
-    .follow__btn:hover { transform: translate(-50%, calc(50% - 2px)); background: #161616; }
+    /* вращающаяся светящаяся обводка */
+    .follow__btn::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      z-index: -1;
+      background: conic-gradient(from var(--ring), rgba(255,255,255,.15) 0deg, rgba(255,255,255,.15) 200deg, #ffcf8a 260deg, #fff 300deg, rgba(255,255,255,.15) 340deg);
+      animation: ringSpin 3s linear infinite;
+    }
+    /* белая заливка кнопки поверх обводки */
+    .follow__btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      z-index: -1;
+      background: #fff;
+    }
+    @property --ring { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+    @keyframes ringSpin { to { --ring: 360deg; } }
+    @keyframes btnGlow {
+      0%, 100% { filter: drop-shadow(0 0 6px rgba(255, 200, 140, .35)) drop-shadow(0 8px 24px rgba(0,0,0,.45)); }
+      50%      { filter: drop-shadow(0 0 14px rgba(255, 200, 140, .6)) drop-shadow(0 8px 24px rgba(0,0,0,.45)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .follow__btn, .follow__btn::before { animation: none; }
+    }
+    .follow__btn:hover { transform: translate(-50%, calc(50% - 2px)); }
     .follow__btn svg { width: 20px; height: 20px; }
 
     /* Подпись внизу страницы */
