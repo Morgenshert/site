@@ -446,15 +446,15 @@
     /* Растушёвка краёв роликов-иконок, чтобы не было резких границ */
     .stat__video {
       /* виньетка: края растушёваны, низ плавно уходит в темноту под цифры */
-      -webkit-mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 14%, #000 45%, transparent 96%);
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 26%, #000 74%, transparent), linear-gradient(to bottom, transparent, #000 18%, #000 30%, transparent 84%);
       -webkit-mask-composite: source-in;
-              mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 14%, #000 45%, transparent 96%);
+              mask-image: linear-gradient(to right, transparent, #000 26%, #000 74%, transparent), linear-gradient(to bottom, transparent, #000 18%, #000 30%, transparent 84%);
               mask-composite: intersect;
     }
     .stat__video.stat__globe {
-      -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent 100%), linear-gradient(to bottom, #000 40%, transparent 92%);
+      -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent 100%), linear-gradient(to bottom, #000 22%, transparent 82%);
       -webkit-mask-composite: source-in;
-              mask-image: radial-gradient(closest-side, #000 72%, transparent 100%), linear-gradient(to bottom, #000 40%, transparent 92%);
+              mask-image: radial-gradient(closest-side, #000 55%, transparent 100%), linear-gradient(to bottom, #000 22%, transparent 82%);
               mask-composite: intersect;
     }   /* у ролика планеты поля вокруг — компенсируем */
 
