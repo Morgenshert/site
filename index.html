@@ -423,9 +423,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: clamp(10px, 1.6vw, 18px);
     }
-    .stat__text { display: flex; flex-direction: column; align-items: center; }
+    .stat__text {                   /* цифры заезжают на нижнюю часть иконки */
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: clamp(-58px, -5vw, -32px);
+    }
     .stat__icon {
       width: clamp(120px, 17vw, 180px);
       height: clamp(120px, 17vw, 180px);
@@ -439,14 +445,17 @@
     .stat__globe { transform: scale(1.18); }
     /* Растушёвка краёв роликов-иконок, чтобы не было резких границ */
     .stat__video {
-      -webkit-mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+      /* виньетка: края растушёваны, низ плавно уходит в темноту под цифры */
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 14%, #000 45%, transparent 96%);
       -webkit-mask-composite: source-in;
-              mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+              mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 14%, #000 45%, transparent 96%);
               mask-composite: intersect;
     }
     .stat__video.stat__globe {
-      -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
-              mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+      -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent 100%), linear-gradient(to bottom, #000 40%, transparent 92%);
+      -webkit-mask-composite: source-in;
+              mask-image: radial-gradient(closest-side, #000 72%, transparent 100%), linear-gradient(to bottom, #000 40%, transparent 92%);
+              mask-composite: intersect;
     }   /* у ролика планеты поля вокруг — компенсируем */
 
     .stat__num {
