@@ -501,19 +501,18 @@
       transition: opacity .8s ease, transform .8s cubic-bezier(.2, .8, .2, 1);
     }
     .follow__card.seen { opacity: 1; transform: none; }
-    .follow__glow {                 /* свечение берёт цвета из видео и меняется вместе с ним */
+    /* Мягкое ровное свечение вокруг плашки: цвет берётся из видео (средний цвет кадра) и плавно меняется */
+    .follow__card::before {
+      content: "";
       position: absolute;
-      left: -16%;
-      top: -24%;
-      width: 132%;
-      height: 148%;
+      inset: 6% -3% 2%;
       z-index: -1;
-      filter: blur(42px) saturate(1.6) brightness(1.4);
-      opacity: .5;                  /* свечение помягче */
-      /* мягкий овал без углов */
-      -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
-              mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+      border-radius: 48px;
       pointer-events: none;
+      background: rgb(var(--glow, 255 170 110));
+      filter: blur(60px);
+      opacity: .32;
+      transition: background 1.5s linear;
     }
     .follow__box {                  /* скруглённая плашка с видео вместо белого фона */
       position: relative;
@@ -606,7 +605,6 @@
     /* Телефон */
     @media (max-width: 600px) {
       /* на телефоне — спокойный статичный ореол вместо «живого» свечения из видео (Safari на iPhone с ним мерцает) */
-      .follow__glow { display: none; }
       .follow__card::before {
         content: "";
         position: absolute;
@@ -617,6 +615,9 @@
         z-index: -1;
         pointer-events: none;
         background: radial-gradient(closest-side, rgba(255, 186, 120, .16), rgba(255, 186, 120, .06) 60%, transparent);
+        filter: none;
+        opacity: 1;
+        border-radius: 0;
       }
       .hero { --banner: 72vh; padding-top: 88px; }
       .follow__btn { padding: 13px 22px; font-size: 15px; gap: 8px; }
@@ -711,7 +712,6 @@
   <!-- ================= ОСТАЛЬНОЕ — В TELEGRAM ================= -->
   <section class="follow">
     <div class="follow__card" id="followCard">
-      <canvas class="follow__glow" id="followGlow" width="16" height="9" aria-hidden="true"></canvas>
       <div class="follow__box">
         <video class="follow__video" src="telegram.mp4" poster="telegram-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
         <h2 class="follow__title">Остальное –<br>в Telegram</h2>
@@ -885,23 +885,29 @@
     seen.observe(statsEl);
     seen.observe(document.getElementById("followCard"));
 
-    /* Свечение плашки Telegram: каждый кадр ролика копируется в маленький размытый холст */
+    /* Свечение плашки Telegram: раз в полсекунды берём средний цвет кадра и плавно подмешиваем */
     (function () {
       const v = document.querySelector(".follow__video");
-      const cv = document.getElementById("followGlow");
-      if (!v || !cv || matchMedia("(max-width: 600px)").matches) return;   // на телефоне не рисуем — там статичный ореол
-      const ctx = cv.getContext("2d");
-      let first = true;
-      const draw = () => {
-        if (v.readyState >= 2) {
-          // каждый кадр подмешивается понемногу — цвет плавно перетекает, без вспышек на склейках
-          ctx.globalAlpha = first ? 1 : .04;
-          ctx.drawImage(v, 0, 0, cv.width, cv.height);
-          first = false;
-        }
-        requestAnimationFrame(draw);
-      };
-      requestAnimationFrame(draw);
+      const card = document.getElementById("followCard");
+      if (!v || !card || matchMedia("(max-width: 600px)").matches) return;   // на телефоне — статичный ореол
+      const cv = document.createElement("canvas");
+      cv.width = cv.height = 1;
+      const ctx = cv.getContext("2d", { willReadFrequently: true });
+      let cur = null;
+      setInterval(() => {
+        if (v.readyState < 2 || v.paused) return;
+        try {
+          ctx.drawImage(v, 0, 0, 1, 1);
+          let [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+          // поднимаем яркость, чтобы тёмные кадры давали цвет, а не серую дымку
+          const k = 210 / Math.max(r, g, b, 1);
+          r = Math.min(255, r * k); g = Math.min(255, g * k); b = Math.min(255, b * k);
+          // подмешиваем тёплый оттенок сайта, чтобы не было серой дымки
+          r = r * .6 + 255 * .4; g = g * .6 + 170 * .4; b = b * .6 + 110 * .4;
+          cur = cur ? cur.map((c, i) => c + ([r, g, b][i] - c) * .25) : [r, g, b];
+          card.style.setProperty("--glow", cur.map(Math.round).join(" "));
+        } catch (e) {}
+      }, 500);
     })();
 
     /* Страховка: запускаем фоновые ролики, если браузер их приостановил */
