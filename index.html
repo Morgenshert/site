@@ -412,21 +412,22 @@
     .shop span { opacity: .6; font-size: 14px; }
 
     /* ===== Живые цифры из магазина ===== */
-    .stats {
+    .stats {                        /* два крупных блока рядом: заказы и страны */
       display: flex;
       justify-content: center;
-      gap: clamp(28px, 6vw, 64px);
-      margin-top: clamp(32px, 4vw, 44px);
+      gap: clamp(24px, 9vw, 120px);
+      margin-top: clamp(36px, 5vw, 56px);
     }
-    .stat {                         /* иконка слева, цифра и подпись справа */
+    .stat {                         /* большая живая иконка сверху, под ней цифра и подпись */
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: clamp(10px, 1.6vw, 16px);
+      gap: clamp(10px, 1.6vw, 18px);
     }
-    .stat__text { display: flex; flex-direction: column; align-items: flex-start; }
+    .stat__text { display: flex; flex-direction: column; align-items: center; }
     .stat__icon {
-      width: clamp(44px, 5.6vw, 68px);
-      height: clamp(44px, 5.6vw, 68px);
+      width: clamp(120px, 17vw, 180px);
+      height: clamp(120px, 17vw, 180px);
       flex: none;
       overflow: visible;
     }
@@ -448,7 +449,7 @@
     }   /* у ролика планеты поля вокруг — компенсируем */
 
     .stat__num {
-      font-size: clamp(30px, 4.2vw, 50px);   /* цифры поменьше */
+      font-size: clamp(40px, 6vw, 72px);     /* крупные цифры */
       font-weight: 700;
       letter-spacing: -0.04em;
       line-height: 1;
@@ -457,14 +458,14 @@
     }
     .stat__label {
       margin-top: 8px;
-      font-size: 15px;
+      font-size: clamp(15px, 1.5vw, 18px);
       color: rgba(255,255,255,.7);
     }
     .stats__note {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-top: 18px;
+      margin-top: clamp(24px, 3vw, 36px);
       font: 500 13px ui-monospace, "SF Mono", Menlo, monospace;
       letter-spacing: .02em;           /* строчными, не капсом */
       color: rgba(255,255,255,.55);
