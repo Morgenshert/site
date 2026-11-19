@@ -423,15 +423,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: clamp(10px, 1.6vw, 18px);
     }
-    .stat__text {                   /* цифры заезжают на нижнюю часть иконки */
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: clamp(-58px, -5vw, -32px);
-    }
+    .stat__text { display: flex; flex-direction: column; align-items: center; }
     .stat__icon {
       width: clamp(120px, 17vw, 180px);
       height: clamp(120px, 17vw, 180px);
@@ -445,17 +439,14 @@
     .stat__globe { transform: scale(1.18); }
     /* Растушёвка краёв роликов-иконок, чтобы не было резких границ */
     .stat__video {
-      /* виньетка: края растушёваны, низ плавно уходит в темноту под цифры */
-      -webkit-mask-image: linear-gradient(to right, transparent, #000 26%, #000 74%, transparent), linear-gradient(to bottom, transparent, #000 18%, #000 30%, transparent 84%);
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
       -webkit-mask-composite: source-in;
-              mask-image: linear-gradient(to right, transparent, #000 26%, #000 74%, transparent), linear-gradient(to bottom, transparent, #000 18%, #000 30%, transparent 84%);
+              mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent), linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
               mask-composite: intersect;
     }
     .stat__video.stat__globe {
-      -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent 100%), linear-gradient(to bottom, #000 22%, transparent 82%);
-      -webkit-mask-composite: source-in;
-              mask-image: radial-gradient(closest-side, #000 55%, transparent 100%), linear-gradient(to bottom, #000 22%, transparent 82%);
-              mask-composite: intersect;
+      -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+              mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
     }   /* у ролика планеты поля вокруг — компенсируем */
 
     .stat__num {
@@ -724,7 +715,7 @@
       <div class="follow__box">
         <video class="follow__video" src="telegram.mp4" poster="telegram-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
         <h2 class="follow__title">Остальное –<br>в Telegram</h2>
-        <p class="follow__text">Показываю больше жизни. Победы, провалы и цифры – то, что не влезает в Instagram.</p>
+        <p class="follow__text">Про жизнь и развитие моих проектов – то, что не влезает в Instagram.</p>
       </div>
       <a class="follow__btn" href="https://t.me/by_izotovvo" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21.5 3.5 2.5 10.8l7 2.7m12-10L18 20.5l-8.5-7m12-10-12 10m0 0V19l3.2-3.3"/></svg>
